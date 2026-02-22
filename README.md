@@ -171,6 +171,17 @@
   - 오케스트레이션: `LangGraph` 에이전트 + 웹 검색(`DuckDuckGoSearchRun`) 결합
   - 관측성: `Langfuse` 콜백 기반 추적
 
+### 천하제일 RAG 대회 (Competition Project)
+- 노트북: [`천하제일_RAG대회_안호성.ipynb`](Codeit_Mission/천하제일_RAG대회_안호성.ipynb)
+- 프로젝트 내용:
+  - 비공개 평가 문서(PDF: `신입사원민수`) 기반 정답형 RAG 챗봇 성능 경쟁
+  - 상식 추론보다 문서 근거 검색 정확도를 중점으로 평가하는 대회형 과제
+- 구현 방식:
+  - Dense + Sparse 하이브리드 검색: `FAISS` + `BM25`
+  - 쿼리 리라이트 후 RRF(Reciprocal Rank Fusion) 기반 후보 통합
+  - `CrossEncoder(BAAI/bge-reranker-v2-m3)`로 최종 재정렬
+  - `LangChain` Runnable 체인 + 평가 유틸(`grading_utils`)로 점수 검증
+
 ---
 
 ## Hugging Face Audio Missions
