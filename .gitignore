@@ -205,3 +205,7 @@ cython_debug/
 marimo/_static/
 marimo/_lsp/
 __marimo__/
+
+# Large local datasets (do not track)
+Codeit_Mission/data/summarization (1).zip
+Codeit_Mission/data/일상생활및구어체_한영.zip
