@@ -204,15 +204,9 @@
   - `WER` 지표 기반 검증 + 추론 샘플링
   - 결과 모델 저장 및 재로드 검증
 
-### HF Audio Mission 4. 한국어 TTS(SpeechT5) 파이프라인
-- 노트북: [`허깅페이스_오디오_미션_4_안호성.ipynb`](HF_Mission/허깅페이스_오디오_미션_4_안호성.ipynb)
-- 미션 내용:
-  - KSS 데이터셋 기반 한국어 텍스트-음성 합성
-- 구현 방식:
-  - 텍스트 전처리(자모 분해) + 오디오 파형/멜스펙 변환
-  - `SpeechT5` + `HiFi-GAN` 보코더 조합
-  - 화자 임베딩: `speechbrain/spkrec-xvect-voxceleb` 활용
-  - 길이 필터링/패딩/커스텀 collator로 안정적 학습 배치 구성
+### HF Audio Mission 4. TTS
+- SpeechT5에 한국어를 학습시킬려면 한국어 전용으로 커스텀할 필요가 있습니다.
+- 구현 링크: [링크](https://github.com/hobi2k/SpeechT5_Korean)
 
 ---
 
