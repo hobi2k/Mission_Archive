@@ -1,0 +1,24 @@
+services:
+  trainer_export:
+    image: ahnhs2k/mission15-trainer:1.0
+    working_dir: /workspace
+    command: >
+      sh -c "python train.py &&
+      mkdir -p /shared &&
+      cp /workspace/models/model.pkl /shared/model.pkl &&
+      cp /workspace/data/test.csv /shared/test.csv"
+    volumes:
+      - ./shared:/shared
+
+  notebook:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    working_dir: /workspace
+    command: >
+      jupyter notebook --ip=0.0.0.0 --port=8888 --no-browser --allow-root --NotebookApp.token=
+    ports:
+      - "8888:8888"
+    volumes:
+      - ./:/workspace
+      - ./shared:/shared

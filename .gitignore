@@ -209,3 +209,7 @@ __marimo__/
 # Large local datasets (do not track)
 Codeit_Mission/data/summarization (1).zip
 Codeit_Mission/data/일상생활및구어체_한영.zip
+
+# Mission 15 artifacts (generated binaries)
+Codeit_Mission/미션15_1팀_안호성/mission-result/researcher1/models/
+Codeit_Mission/미션15_1팀_안호성/mission-result/researcher2/shared/
