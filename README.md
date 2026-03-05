@@ -171,6 +171,19 @@
   - 오케스트레이션: `LangGraph` 에이전트 + 웹 검색(`DuckDuckGoSearchRun`) 결합
   - 관측성: `Langfuse` 콜백 기반 추적
 
+### Mission 15. Docker 기반 협업 모델링/추론 파이프라인
+- 코드: [`미션15_1팀_안호성/mission-result`](Codeit_Mission/미션15_1팀_안호성/mission-result)
+- 보고서: [`mission15_report_안호성.docx`](Codeit_Mission/미션15_1팀_안호성/mission15_report_안호성.docx), [`mission15_report_안호성.md`](Codeit_Mission/미션15_1팀_안호성/mission15_report_안호성.md)
+- 미션 내용:
+  - 연구자 1: 학생 성적 데이터 전처리/EDA/회귀 모델 학습 후 `model.pkl` 추출
+  - 연구자 2: 연구자 1 Docker 이미지를 활용해 `model.pkl`/`test.csv`를 전달받고 추론 수행
+  - 결과물: `result.csv` 생성 및 협업 워크플로우 문서화
+- 구현 방식:
+  - 연구자 1 이미지(`mission15-trainer`) 빌드/푸시 후 `train.py` 자동 실행
+  - `ColumnTransformer + RandomForestRegressor` 파이프라인 구성, RMSE 기반 검증
+  - `docker-compose` 공유 볼륨(`shared`)으로 파일 전달
+  - 대안 경로로 `docker cp` 기반 파일 복사 전략 지원
+
 ### 천하제일 RAG 대회 (Competition Project)
 - 노트북: [`천하제일_RAG대회_안호성.ipynb`](Codeit_Mission/천하제일_RAG대회_안호성.ipynb)
 - 프로젝트 내용:
