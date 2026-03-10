@@ -1,0 +1,12 @@
+{
+  "name": "mission16-onnx-js",
+  "version": "1.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "start": "node onnx_infer.js"
+  },
+  "dependencies": {
+    "onnxruntime-node": "^1.24.3"
+  }
+}
