@@ -184,6 +184,44 @@
   - `docker-compose` 공유 볼륨(`shared`)으로 파일 전달
   - 대안 경로로 `docker cp` 기반 파일 복사 전략 지원
 
+### Mission 16. LLM 모델 포맷 변환과 ONNX 추론 검증
+- 코드: [`미션16_1팀_안호성/modeling.ipynb`](Codeit_Mission/미션16_1팀_안호성/modeling.ipynb), [`미션16_1팀_안호성/inference.ipynb`](Codeit_Mission/미션16_1팀_안호성/inference.ipynb)
+- 타 언어 런타임 예제: [`미션16_1팀_안호성_runtime`](Codeit_Mission/미션16_1팀_안호성_runtime)
+- 보고서/참고 자료: [`미션16_1팀_안호성/미션16_1팀_안호성_요약보고서.pdf`](Codeit_Mission/미션16_1팀_안호성/미션16_1팀_안호성_요약보고서.pdf), [`미션16_1팀_안호성/디버깅_오류해결_기록.md`](Codeit_Mission/미션16_1팀_안호성/디버깅_오류해결_기록.md), [`미션16_1팀_안호성/mission16_model_sizes.png`](Codeit_Mission/미션16_1팀_안호성/mission16_model_sizes.png), [`미션16_1팀_안호성/mission16_inference_avg_time.png`](Codeit_Mission/미션16_1팀_안호성/mission16_inference_avg_time.png)
+- 미션 내용:
+  - 기본 모델 `qtranslator_1.7b_v2`를 `.pth`, 양자화 `.pth`, `.onnx` 형식으로 변환 및 저장
+  - 동일 번역 프롬프트 형식에서 Hugging Face 원본 모델, `.pth`, 양자화 `.pth`, ONNX를 모두 추론 비교
+  - ONNX Runtime 기반 추론 코드와 C++/JavaScript 런타임 샘플까지 작성
+- 구현 방식:
+  - `modeling.ipynb`에서 Hugging Face Hub 다운로드, 일반 체크포인트 저장, 동적 양자화 저장, ONNX export 수행
+  - 대용량 ONNX external data(`.onnx` + `.onnx.data`) 구조를 고려해 파일 크기 계산과 checker 검증 방식을 분리
+  - `inference.ipynb`에서 공통 프롬프트/후처리(`### Instruction / Input / Output`)를 유지한 채 형식별 평균 추론 시간을 비교했고, 비교 일관성을 위해 모든 방식은 CPU 기준으로 통일
+  - `미션16_1팀_안호성_runtime`에서 `tokenizer_bridge.py`를 통해 토크나이저를 재사용하고, C++/Node.js에서 ONNX Runtime greedy decoding 예제 제공
+  - C++ 예제는 `third_party/onnxruntime-linux-x64-*` 아래에 ONNX Runtime SDK를 두는 구조로 정리하고, README에 다운로드/빌드/실행 절차를 문서화
+- 주요 결과:
+  - 산출물 저장 경로: `Codeit_Mission/models/m16/mission_16_qtranslator_1.7b_v2.{pth,onnx}` 및 `mission_16_qtranslator_1.7b_v2_quantized.pth`
+  - 파일 용량: PTH 6563.60MB, 양자화 PTH 2828.51MB, ONNX(+external data) 6568.74MB
+  - 추론 시간(CPU 기준 평균): `pth_quant` 0.8936초, `pth` 1.8774초, `hf` 1.9756초, `onnx` 3.3624초
+  - ONNX는 이번 구현에서 KV cache 없는 수동 greedy decoding을 사용했기 때문에, 시간 결과는 포맷 자체의 절대 속도보다 구현 제약이 포함된 결과로 해석
+  - ONNX 검증 과정에서 opset 변환 경고, external-data checker serialize 이슈 등을 분리 기록해 비치명 오류와 실제 추론 가능 여부를 구분
+
+### Mission 17. Streamlit 기반 MNIST ONNX 숫자 인식 서비스
+- 코드: [`미션17_1팀_안호성/app.py`](Codeit_Mission/미션17_1팀_안호성/app.py)
+- 보고서: [`미션17_1팀_안호성/미션17_1팀_안호성_요약보고서.pdf`](Codeit_Mission/미션17_1팀_안호성/미션17_1팀_안호성_요약보고서.pdf)
+- 프로젝트 문서: [`미션17_1팀_안호성/README.md`](Codeit_Mission/미션17_1팀_안호성/README.md)
+- 미션 내용:
+  - 사용자가 웹 캔버스에 손글씨 숫자를 그리면 MNIST ONNX 모델이 즉시 숫자를 예측하는 Streamlit 서비스를 구현
+  - 전처리 이미지, 0~9 확률 차트, 저장소 갤러리, Docker 배포 경로까지 포함한 프로토타입 완성
+- 구현 방식:
+  - `streamlit-drawable-canvas`로 대형 입력 캔버스를 구성하고, `onnxruntime`으로 CPU 추론 수행
+  - 입력 이미지를 crop/pad/resize 후 `[1, 1, 28, 28]` 형태로 전처리하고 softmax 확률을 시각화
+  - `.streamlit/config.toml`로 기본 테마를 고정하고 `assets/style.css`로 카드형 레이아웃과 결과 패널 스타일을 분리
+  - `app.py` 내부에서 모델 자동 다운로드와 `st.cache_resource` 기반 ONNX 세션 캐싱을 처리
+  - `Dockerfile`로 실행 이미지를 만들고, Docker Hub 저장소 `ahnhs2k/mnist-onnx-streamlit`까지 배포 절차를 문서화
+- 주요 결과:
+  - 상단 요약 카드, 좌측 대형 입력 캔버스, 우측 결과 패널, 하단 저장소 갤러리 구조로 가독성 높은 단일 페이지 UI 구현
+  - 로컬 실행, Docker 실행, Docker Hub 업로드 절차를 README와 보고서에 함께 정리
+
 ### 천하제일 RAG 대회 (Competition Project)
 - 노트북: [`천하제일_RAG대회_안호성.ipynb`](Codeit_Mission/천하제일_RAG대회_안호성.ipynb)
 - 프로젝트 내용:

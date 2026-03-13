@@ -213,3 +213,11 @@ Codeit_Mission/data/일상생활및구어체_한영.zip
 # Mission 15 artifacts (generated binaries)
 Codeit_Mission/미션15_1팀_안호성/mission-result/researcher1/models/
 Codeit_Mission/미션15_1팀_안호성/mission-result/researcher2/shared/
+
+# Mission_Archive/Codeit_Mission 모델 아티팩트 제외
+Codeit_Mission/models/
+
+# Mission 16 runtime artifacts (C++ / JS)
+Codeit_Mission/미션16_1팀_안호성_runtime/build/
+Codeit_Mission/미션16_1팀_안호성_runtime/node_modules/
+Codeit_Mission/미션16_1팀_안호성_runtime/third_party/
