@@ -222,6 +222,26 @@
   - 상단 요약 카드, 좌측 대형 입력 캔버스, 우측 결과 패널, 하단 저장소 갤러리 구조로 가독성 높은 단일 페이지 UI 구현
   - 로컬 실행, Docker 실행, Docker Hub 업로드 절차를 README와 보고서에 함께 정리
 
+### Mission 18. 영화 리뷰 감성 분석 웹 애플리케이션
+- 코드: [`미션18_1팀_안호성/backend`](Codeit_Mission/미션18_1팀_안호성/backend), [`미션18_1팀_안호성/frontend`](Codeit_Mission/미션18_1팀_안호성/frontend)
+- 보고서: [`미션18_1팀_안호성/미션18_1팀_안호성_요약보고서.pdf`](Codeit_Mission/미션18_1팀_안호성/미션18_1팀_안호성_요약보고서.pdf)
+- 프로젝트 문서: [`미션18_1팀_안호성/README.md`](Codeit_Mission/미션18_1팀_안호성/README.md), [`미션18_1팀_안호성/mission18_architecture_and_erd.md`](Codeit_Mission/미션18_1팀_안호성/mission18_architecture_and_erd.md)
+- 미션 내용:
+  - Streamlit 프론트엔드와 FastAPI 백엔드를 사용해 영화 정보, 사용자 리뷰, 리뷰 감성 분석 결과를 함께 보여주는 웹 애플리케이션 구현
+  - 영화 등록, 리뷰 등록, 최근 리뷰 확인, 영화별 평균 평점 시각화 기능 포함
+  - 영화 3개 이상과 각 영화당 리뷰 10개 이상을 시연 가능한 형태로 구성
+- 구현 방식:
+  - 프론트엔드는 `Streamlit` 단일 페이지 구조로 구현하고, 영화 목록/영화 등록/리뷰 등록/최근 리뷰를 한 화면에 배치
+  - 백엔드는 `FastAPI + SQLite + SQLAlchemy` 조합으로 영화/리뷰 CRUD와 평균 평점 계산 API 제공
+  - 감성 분석은 `Copycats/koelectra-base-v3-generalized-sentiment-analysis` 분류 모델을 FastAPI 내부에서 직접 로드해 수행
+  - 리뷰 등록 직후 `st.rerun()`을 사용해 평균 평점과 최근 리뷰가 즉시 갱신되도록 처리
+  - 샘플 데이터 스크립트(`seed_sample_data.py`, `seed_reviews.py`)를 작성해 제출용 데이터 상태를 재현 가능하게 정리
+- 주요 결과:
+  - 영화 포스터, 감독, 장르, 개봉일, 평균 평점을 포함한 카드형 목록 UI 구현
+  - 리뷰 등록 시 감성 라벨과 감성 점수를 자동 저장하고, 이를 바탕으로 5점 환산 평균 평점 계산
+  - FastAPI Swagger UI 문서, 서비스 동작 캡처, 구조도 및 ERD 문서를 함께 정리해 제출 폴더를 완성
+  - 포스터 URL은 실제 접근 가능한 링크만 검증 후 반영했고, 최종 보고서를 PDF까지 생성해 제출 가능 상태로 정리
+
 ### 천하제일 RAG 대회 (Competition Project)
 - 노트북: [`천하제일_RAG대회_안호성.ipynb`](Codeit_Mission/천하제일_RAG대회_안호성.ipynb)
 - 프로젝트 내용:
